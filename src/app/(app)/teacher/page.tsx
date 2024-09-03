@@ -1,6 +1,6 @@
 "use client"
 import TeacherCard from '@/components/TeacherCard';
-import classData from '../../data/teacher_class.json'
+import classData from '@/data/teacher_class.json'
 interface Class {
     className :string;
     date:string;
@@ -20,7 +20,7 @@ const page = () => {
         classNames.map(({className,date})=>{
             return(
                 <div key={className} >
-                    <TeacherCard  className={className} date={date}/>
+                    <TeacherCard  className={className} date={date} />
                 </div>
                 
             )

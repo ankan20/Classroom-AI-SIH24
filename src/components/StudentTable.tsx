@@ -19,12 +19,16 @@ const students: Student[] = [
   { name: "Olivia Davis", className: "Physics" },
 ];
 
-const StudentTable: React.FC = () => {
+interface TeacherCardProps {
+  teacherName: string;
+}
+
+const StudentTable: React.FC<TeacherCardProps> = ({teacherName}:{teacherName:string}) => {
   const router = useRouter();
 
   const handleCardClick = (studentName: string) => {
-    console.log(`Clicked on student: ${studentName}`); // Debugging line
-    router.push(`/student-details/${studentName}`);
+    console.log(teacherName);
+    router.push(`/${teacherName}/${studentName}`);
   };
 
   return (

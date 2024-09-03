@@ -2,10 +2,10 @@
 
 import StudentTable from "@/components/StudentTable"
 
-const page = () => {
+const page = ({teacherName}:{teacherName:string}) => {
   return (
     <div>
-      <StudentTable />
+      <StudentTable teacherName={teacherName}/>
     </div>
   )
 }
