@@ -1,6 +1,8 @@
 // components/Signup.tsx
 import { useState } from 'react';
 import axios from 'axios';
+import Link from 'next/link';
+import { useRouter } from "next/navigation";
 
 type Role = 'admin' | 'teacher' | 'student';
 
@@ -18,6 +20,7 @@ const Signup = () => {
   const [images, setImages] = useState<Images>({ front: null, left: null, right: null, up: null });
   const [message, setMessage] = useState('');
   const [isSuccess, setIsSuccess] = useState(false); // To handle success message color
+  const router = useRouter();
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>, position: keyof Images) => {
     if (e.target.files && e.target.files[0]) {
@@ -51,8 +54,16 @@ const Signup = () => {
       const response = await axios.post('/api/signup', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
-      setMessage('Signup successful!');
-      setIsSuccess(true);
+      if (response.status === 201) {
+        setMessage('Signup successful!');
+        setIsSuccess(true);
+        setTimeout(() => {
+          router.push('/login'); // Use router.push instead
+        }, 1000); // Delay for a smoother user experience
+      } else {
+        throw new Error('Signup failed.');
+      }
+
     } catch (error) {
       console.error('Signup error:', error);
       setMessage('Signup failed.');
@@ -140,6 +151,9 @@ const Signup = () => {
           {message}
         </p>
       )}
+      <p className="text-sm font-normal text-white mt-4">Login if already a user ,
+        <Link href={"/login"} className="text-blue-400 hover:underline ml-2">login</Link>
+      </p>
     </form>
   );
 };

@@ -1,31 +1,53 @@
 "use client";
-import React from "react";
-import { BackgroundBeams } from "./ui/background-beams";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Boxes } from "./ui/background-boxes";
 
-// Define the interface for the student data
-interface Student {
-  name: string;
-  className: string;
+interface Teacher {
+  username: string;
+  _id:string;
 }
 
-// Sample student data (replace with your actual data)
-const teachers: Student[] = [
-    { name: "Dr. Alice Thompson", className: "Mathematics" },
-    { name: "Prof. Robert Wilson", className: "Science" },
-    { name: "Ms. Karen Martinez", className: "History" },
-    { name: "Mr. David Lee", className: "English" },
-    { name: "Dr. Laura Clark", className: "Physics" },
-  ];
-  
-
-const StudentTable: React.FC = () => {
+const TeacherTable: React.FC = () => {
+  const [teachers, setTeachers] = useState<Teacher[]>([]);
+  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
-  const handleCardClick = (className: string) => {
-     // Debugging line
-    router.push(`/teacher/${className}`);
+  useEffect(() => {
+    const fetchTeachers = async () => {
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      const adminId = user.id;
+
+      if (!adminId) {
+        setError('Admin ID is missing');
+        return;
+      }
+
+      try {
+        const response = await fetch('/api/admin/teachers', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ adminId }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch teachers');
+        }
+
+        const data = await response.json();
+        setTeachers(data.teachers);
+      } catch (error: any) {
+        setError(error.message);
+      }
+    };
+
+    fetchTeachers();
+  }, []);
+
+  const handleCardClick = (name: string) => {
+    router.push(`/admin/teacher-${name}`);
   };
 
   return (
@@ -34,28 +56,26 @@ const StudentTable: React.FC = () => {
       <Boxes />
       <div className="relative p-6 -mt-24 w-full">
         <h1 className="text-3xl font-bold mb-6 text-center">
-          Teacher's Information
+          All Teachers's Information
         </h1>
+        {error && <p className="text-red-500 text-center">{error}</p>}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 z-20 relative">
           {teachers.map((teacher) => (
             <div
-              key={teacher.name}
+              key={teacher._id}
               className="p-4 bg-white dark:bg-zinc-900 border border-gray-300 dark:border-gray-700 rounded-lg shadow hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
-              onClick={() => handleCardClick(teacher.className)}
+              onClick={() => handleCardClick(teacher.username)}
             >
               <h2 className="text-lg font-semibold text-black dark:text-white">
-                {teacher.name}
+                Teacher Name : {teacher.username}
               </h2>
-              <p className="text-sm text-neutral-600 dark:text-neutral-400">
-                Class: {teacher.className}
-              </p>
+              <p className="text-blue-200">click to upload video</p>
             </div>
           ))}
         </div>
-        {/* <BackgroundBeams /> */}
       </div>
     </div>
   );
 };
 
-export default StudentTable;
+export default TeacherTable;
