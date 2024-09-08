@@ -1,99 +1,70 @@
-"use client";
+'use client';
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import teachersData from "../../../data/sample_data.json";
-import { BackgroundGradient } from "../../../components/ui/background-gradient";
-import Link from "next/link";
-import WeeklyCard from "../../../components/WeeklyCard";
 
-interface Teacher {
-  id: number;
-  name: string;
-  subject: string;
-  description: string;
-}
-
-function StudentPage() {
-  const [user, setUser] = useState<{ role?: string } | null>(null);
-  const [loading, setLoading] = useState(true);
+const StudentDashboard = () => {
+  const [teachers, setTeachers] = useState([]);
   const router = useRouter();
-  const teachers: Teacher[] = teachersData.teachers;
-
-  const reportData = {
-    studentName: "John Doe",
-    distractionTime: "15%",
-    totalInClass: "20 hours",
-    attentive: "80%",
-    responsive: "70%"
-  };
-  const studentName = "John Doe";
 
   useEffect(() => {
-    const userData = localStorage.getItem('user');
-    if (userData) {
-      const parsedUser = JSON.parse(userData);
-      if (parsedUser.role === 'student') {
-        setUser(parsedUser);
-        setLoading(false);
-      } else {
-        router.push('/login');
-      }
-    } else {
-      router.push('/login');
-    }
-  }, [router]);
+    const fetchTeachers = async () => {
+      const username = JSON.parse(localStorage.getItem('user') || '{}').username;
 
-  if (loading) return <p className='mt-40 text-center'>Loading...</p>;
+      const res = await fetch('/api/get-teacher-student', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username }),
+      });
+
+      if (!res.ok) {
+        console.error('Failed to fetch teachers');
+        return;
+      }
+
+      const data = await res.json();
+      setTeachers(data);
+    };
+
+    fetchTeachers();
+  }, []);
+
+  const handleInsightClick = (teacherName: string) => {
+    router.push(`/student/${teacherName}`);
+  };
 
   return (
-    <div>
-      <div className="py-12 bg-gray-900 max-h-screen">
-        <div className="text-center md:mt-20">
-          <h2 className="text-base text-teal-600 font-semibold tracking-wide uppercase">Weekly Report</h2>
-          <p className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-white sm:text-4xl">Student Performance</p>
-        </div>
-        <div className="-mt-12">
-          <WeeklyCard {...reportData} />
-        </div>
-      </div>
-
-      <div className="h-[50rem] w-full dark:bg-black bg-white dark:bg-grid-white/[0.2] bg-grid-black/[0.2] relative flex items-center justify-center">
-        {/* Radial gradient for the container to give a faded look */}
-        <div className="absolute pointer-events-none inset-0 flex items-center justify-center dark:bg-black bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]"></div>
-        <p className="text-4xl sm:text-7xl font-bold relative z-20 bg-clip-text text-transparent bg-gradient-to-b from-neutral-200 to-neutral-500 py-8"></p>
-
-        <div className="py-12 min-h-screen">
-          <div className="md:mt-20">
-            <div className="text-center">
-              <h2 className="text-base text-teal-600 font-semibold tracking-wide uppercase">TEACHERS LIST</h2>
-              <p className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-white sm:text-4xl">Meet Your Teachers</p>
-            </div>
-          </div>
-          <div className="mt-10 mx-8">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {teachers.map((teacher) => (
-                <div key={teacher.id} className="flex justify-center">
-                  <BackgroundGradient className="flex flex-col rounded-[22px] bg-white dark:bg-zinc-900 overflow-hidden h-full max-w-sm">
-                    <div className="p-4 sm:p-6 flex flex-col items-center text-center flex-grow">
-                      <p className="text-lg sm:text-xl text-black mt-4 mb-2 dark:text-neutral-200">{teacher.name}</p>
-                      <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-2 font-extrabold">Subject: {teacher.subject}</p>
-                      <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">{teacher.description}</p>
-                      <Link href={`/teacher/${teacher.subject}/${studentName}`}>
-                        <p className="px-4 py-2 rounded bg-teal-600 text-white hover:bg-teal-700 transition duration-200">
-                          View Analytics
-                        </p>
-                      </Link>
-                    </div>
-                  </BackgroundGradient>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
+    <div className="min-h-screen bg-gray-100 p-6">
+      <h1 className="text-3xl mt-40 font-bold text-gray-900 mb-6">Student Dashboard</h1>
+      <div className="overflow-x-auto bg-white shadow-lg rounded-lg">
+        <table className="min-w-full divide-y divide-gray-200">
+          <thead className="bg-gray-50">
+            <tr>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Teacher Name</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+            </tr>
+          </thead>
+          <tbody className="bg-white divide-y divide-gray-200">
+            {teachers.map((teacher: any) => (
+              <tr key={teacher.teacherId}>
+                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{teacher.teacherName}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                  <button
+                    onClick={() => handleInsightClick(teacher.teacherName)}
+                    className="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  >
+                    See Insight
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );
-}
+};
 
-export default StudentPage;
+export default StudentDashboard;

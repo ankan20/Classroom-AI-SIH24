@@ -1,8 +1,9 @@
+"use client";
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
-
+import { useRouter, useParams } from 'next/navigation';
 // Register the required Chart.js components
 ChartJS.register(
   CategoryScale,
@@ -20,6 +21,9 @@ const NoiseDetection = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string>('');
 
+  const router = useRouter();
+   const params = useParams();
+   const teacherUsername = params?.teachername;
   // Handle file selection
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
@@ -52,6 +56,25 @@ const NoiseDetection = () => {
       });
       // Set the received data
       setData(response.data);
+      console.log(data,teacherUsername)
+      if (response.data && teacherUsername) {
+        const totalDuration = response.data.noise_duration + response.data.voice_duration;
+        const noisePercentage = (response.data.noise_duration / totalDuration) * 100;
+        const voicePercentage = (response.data.voice_duration / totalDuration) * 100;
+  
+        // Send the percentage data to the API
+        await axios.post('/api/noice-teacher', {
+          teacherUsername,
+          noicePercentage: noisePercentage.toFixed(2),
+          voicePercentage: voicePercentage.toFixed(2),
+        })
+        .then(response => {
+          console.log('Teacher data updated successfully:', response.data);
+        })
+        .catch(error => {
+          console.error('Error updating teacher data:', error);
+        });
+      }
     } catch (err) {
       setError('Error processing the video. Please try again.');
     } finally {

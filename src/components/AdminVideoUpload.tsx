@@ -1,11 +1,21 @@
+
+// "use client";
 // import { useState } from 'react';
 // import axios from 'axios';
+// import { useRouter, useParams } from 'next/navigation';
+// import dynamic from 'next/dynamic';
+
+// // Dynamically import html2pdf only on the client-side
+// const html2pdf = dynamic(() => import('html2pdf.js'), { ssr: false });
 
 // const AdminPage = () => {
 //   const [videoFile, setVideoFile] = useState<File | null>(null);
 //   const [videoUrl, setVideoUrl] = useState<string | null>(null);
 //   const [attendanceData, setAttendanceData] = useState<Array<{ "Student Name": string; "Attendance Status": string }>>([]);
 //   const [message, setMessage] = useState('');
+//   const router = useRouter();
+//   const params = useParams();
+//   const teacherUsername = params?.teachername;
 
 //   const handleVideoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 //     if (e.target.files && e.target.files[0]) {
@@ -27,13 +37,18 @@
 //     formData.append('video', videoFile);
 
 //     try {
-//       const response = await axios.post('http://localhost:5001/api/upload-video', formData, { // Updated URL
+//       const response = await axios.post('http://localhost:5001/api/upload-video', formData, {
 //         headers: { 'Content-Type': 'multipart/form-data' },
 //       });
 
 //       if (response.status === 200) {
 //         setAttendanceData(response.data.attendance);
 //         setMessage('Video uploaded successfully!');
+//         await axios.post('/api/mark-attendance', {
+//           teacherUsername,
+//           attendanceData: response.data.attendance,
+//         });
+
 //       } else {
 //         setMessage('Failed to process video.');
 //       }
@@ -43,37 +58,47 @@
 //     }
 //   };
 
-//   const downloadCSV = () => {
+//   const downloadPDF = async () => {
 //     if (attendanceData.length === 0) {
 //       return;
 //     }
 
-//     // Convert the data to CSV format
-//     const csvRows = [];
-//     const headers = Object.keys(attendanceData[0]);
-//     csvRows.push(headers.join(',')); // Add header row
+//     const element = document.createElement('div');
+//     element.classList.add('pdf-container');
+//     element.innerHTML = `
+//       <h2>Attendance Results</h2>
+//       <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+//         <thead>
+//           <tr>
+//             <th style="border: 1px solid #ddd; padding: 8px;">Student Name</th>
+//             <th style="border: 1px solid #ddd; padding: 8px;">Attendance Status</th>
+//           </tr>
+//         </thead>
+//         <tbody>
+//           ${attendanceData.map(item => `
+//             <tr>
+//               <td style="border: 1px solid #ddd; padding: 8px;">${item["Student Name"]}</td>
+//               <td style="border: 1px solid #ddd; padding: 8px;">${item["Attendance Status"]}</td>
+//             </tr>
+//           `).join('')}
+//         </tbody>
+//       </table>
+//     `;
 
-//     for (const row of attendanceData as any) {
-//       csvRows.push(headers.map(header => row[header]).join(',') ); // Add data rows
+//     // Ensure html2pdf is imported and available
+//     if (html2pdf) {
+//       html2pdf()
+//         .from(element)
+//         .save('attendance_result.pdf');
+//     } else {
+//       console.error('html2pdf is not available.');
 //     }
-
-//     // Create a blob with CSV data and download it
-//     const csvString = csvRows.join('\n');
-//     const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
-//     const url = window.URL.createObjectURL(blob);
-//     const link = document.createElement('a');
-//     link.href = url;
-//     link.setAttribute('download', 'attendance_result.csv');
-//     document.body.appendChild(link);
-//     link.click();
-//     link.remove();
-//     window.URL.revokeObjectURL(url);
 //   };
 
 //   return (
 //     <div className="min-h-screen bg-gray-800 p-8 flex flex-col items-center">
 //       <div className='mt-40'>
-//         <h1 className="text-3xl font-bold text-white mb-6">Upload Video for Analysis</h1>
+//         <h1 className="text-3xl font-bold text-white mb-6">Upload Video for Attendance Analysis</h1>
 //         <form onSubmit={handleSubmit} className="bg-gray-900 p-6 rounded-lg shadow-lg w-full max-w-md">
 //           <div className="mb-4">
 //             <label className="block text-white text-sm font-medium mb-2">Select Video:</label>
@@ -100,7 +125,7 @@
 //             type="submit"
 //             className="w-full p-3 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
 //           >
-//             Submit
+//             Submit 
 //           </button>
 
 //           {message && <p className="mt-4 text-center text-red-400">{message}</p>}
@@ -126,10 +151,10 @@
 //               </tbody>
 //             </table>
 //             <button
-//               onClick={downloadCSV}
+//               onClick={downloadPDF}
 //               className="mt-6 p-3 bg-green-500 text-white rounded hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400"
 //             >
-//               Download CSV
+//               Download PDF
 //             </button>
 //           </div>
 //         )}
@@ -139,15 +164,25 @@
 // };
 
 // export default AdminPage;
+
+"use client";
 import { useState } from 'react';
 import axios from 'axios';
-import html2pdf from 'html2pdf.js';
+import { useRouter, useParams } from 'next/navigation';
+import dynamic from 'next/dynamic';
+
+// Dynamically import html2pdf only on the client-side
+const html2pdf = dynamic(() => import('html2pdf.js'), { ssr: false });
 
 const AdminPage = () => {
   const [videoFile, setVideoFile] = useState<File | null>(null);
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
   const [attendanceData, setAttendanceData] = useState<Array<{ "Student Name": string; "Attendance Status": string }>>([]);
   const [message, setMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false); // State for loading status
+  const router = useRouter();
+  const params = useParams();
+  const teacherUsername = params?.teachername;
 
   const handleVideoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -165,27 +200,35 @@ const AdminPage = () => {
       return;
     }
 
+    setIsLoading(true); // Set loading state to true
+
     const formData = new FormData();
     formData.append('video', videoFile);
 
     try {
-      const response = await axios.post('http://localhost:5001/api/upload-video', formData, { // Updated URL
+      const response = await axios.post('http://localhost:5001/api/upload-video', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
 
       if (response.status === 200) {
         setAttendanceData(response.data.attendance);
         setMessage('Video uploaded successfully!');
+        await axios.post('/api/mark-attendance', {
+          teacherUsername,
+          attendanceData: response.data.attendance,
+        });
       } else {
         setMessage('Failed to process video.');
       }
     } catch (error) {
       console.error('Upload error:', error);
       setMessage('Failed to upload video.');
+    } finally {
+      setIsLoading(false); // Set loading state to false
     }
   };
 
-  const downloadPDF = () => {
+  const downloadPDF = async () => {
     if (attendanceData.length === 0) {
       return;
     }
@@ -212,9 +255,14 @@ const AdminPage = () => {
       </table>
     `;
 
-    html2pdf()
-      .from(element)
-      .save('attendance_result.pdf') ;
+    // Ensure html2pdf is imported and available
+    if (html2pdf) {
+      html2pdf()
+        .from(element)
+        .save('attendance_result.pdf');
+    } else {
+      console.error('html2pdf is not available.');
+    }
   };
 
   return (
@@ -245,9 +293,12 @@ const AdminPage = () => {
 
           <button
             type="submit"
-            className="w-full p-3 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className={`w-full p-3 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 ${
+              isLoading ? 'bg-gray-600 text-gray-300 cursor-not-allowed' : 'bg-blue-500 text-white hover:bg-blue-600'
+            }`}
+            disabled={isLoading}
           >
-            Submit 
+            {isLoading ? 'Processing...' : 'Submit'}
           </button>
 
           {message && <p className="mt-4 text-center text-red-400">{message}</p>}

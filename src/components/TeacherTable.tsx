@@ -47,7 +47,7 @@ const TeacherTable: React.FC = () => {
   }, []);
 
   const handleCardClick = (name: string) => {
-    router.push(`/admin/teacher-${name}`);
+    router.push(`/admin/${name}`);
   };
 
   return (

@@ -8,6 +8,7 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [role, setRole] = useState<'admin' | 'teacher' | 'student'>('student'); // Default role to student
   const [message, setMessage] = useState('');
+  const [checkMessage,setCheckMessage]=useState<boolean>(false);
   const router = useRouter();
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -23,6 +24,7 @@ const Login = () => {
           role: response.data.user.role,
         }));
         setMessage('Login successful!');
+        setCheckMessage(true);
         router.replace(`/${role}`); // Navigate to the appropriate dashboard based on role
       } else {
         setMessage('Login failed.');
@@ -30,6 +32,7 @@ const Login = () => {
     } catch (error) {
       console.error('Login error:', error);
       setMessage('Login failed.');
+      setCheckMessage(false);
     }
   };
 
@@ -64,7 +67,8 @@ const Login = () => {
       </select>
 
       <button type="submit" className="p-2 mt-4 bg-blue-500 text-white rounded hover:bg-blue-600">Login</button>
-      {message && <p className="mt-4 text-center text-red-500">{message}</p>}
+      {message && checkMessage && <p className="mt-4 text-center text-green-500">{message}</p>}
+      {message && !checkMessage && <p className="mt-4 text-center text-red-500">{message}</p>}
       <p className="text-sm font-normal text-white mt-4">signup if not yet ,
         <Link href={"/signup"} className="text-blue-400 hover:underline ml-2">signup</Link>
       </p>

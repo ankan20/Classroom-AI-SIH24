@@ -12,6 +12,7 @@ export  async function POST(request: NextRequest) {
     await connectDb();
 
     const teacherUsername = await request.json();
+    console.log(teacherUsername)
     if (!teacherUsername) {
       return NextResponse.json({ error: 'Teacher ID is required' }, { status: 400 });
     }
