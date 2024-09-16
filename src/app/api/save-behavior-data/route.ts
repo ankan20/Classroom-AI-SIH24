@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
     const today = now.toISOString().split('T')[0];
 
     // Step 4: Iterate through each student's behavior data
-    for (const [studentUsername, behaviors] of Object.entries(behavior_data)) {
+    for (const [studentUsername, behaviors] of Object.entries(behavior_data) as any) {
       if (validStudentUsernames.has(studentUsername)) {
         // Find the student by username
         const student = await Student.findOne({ username: studentUsername });
