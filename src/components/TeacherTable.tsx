@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Boxes } from "./ui/background-boxes";
+import Link from "next/link";
 
 interface Teacher {
   username: string;
@@ -59,7 +60,12 @@ const TeacherTable: React.FC = () => {
           All Teachers's Information
         </h1>
         {error && <p className="text-red-500 text-center">{error}</p>}
+        {
+            teachers.length===0 && <div><p className="text-center text-red-400">You don't have any teachers assigned to you. Please add teachers to your list.Click here to add  <Link href="/admin/add-teacher" className="text-blue-300 underline cursor-pointer">add teachers</Link></p>
+           </div>
+          }
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 z-20 relative">
+         
           {teachers.map((teacher) => (
             <div
               key={teacher._id}
