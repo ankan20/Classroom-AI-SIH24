@@ -1,11 +1,13 @@
-"use client"
-
 import Signup from "@/components/SignupPage";
-
+import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-with-collision";
 function Page() {
   return (
-    <div>
+    <div >
+      <BackgroundBeamsWithCollision >
+       
         <Signup />
+        
+        </BackgroundBeamsWithCollision>
     </div>
   );
 }

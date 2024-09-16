@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@radix-ui/react-label": "^2.1.0",
+    "@tabler/icons-react": "^3.17.0",
     "@types/chart.js": "^2.9.41",
     "@types/lodash": "^4.17.7",
     "axios": "^1.7.7",
@@ -16,7 +18,7 @@
     "clsx": "^2.1.1",
     "cookie": "^0.6.0",
     "formidable": "^3.5.1",
-    "framer-motion": "^11.3.30",
+    "framer-motion": "^11.5.4",
     "fs": "^0.0.1-security",
     "html2canvas": "^1.4.1",
     "html2pdf.js": "^0.10.2",
