@@ -1,11 +1,26 @@
 "use client"
 import AddStudentForm1 from '@/components/AddStudentForm'; // Adjust the import path based on your folder structure
-
+import { motion } from "framer-motion";
+import React from "react";
+import { AuroraBackground } from "@/components/ui/aurora-background";
 const AddStudentForm = () => {
   return (
-    <div className="min-h-screen relative w-full overflow-hidden bg-slate-900 flex flex-col items-center justify-center rounded-lg ">
-      <div className="absolute inset-0 w-full h-full bg-slate-900 z-20 [mask-image:radial-gradient(transparent,white)] pointer-events-none" />
+    <div>
+      
+      <AuroraBackground>
+      <motion.div
+        initial={{ opacity: 0.0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{
+          delay: 0.3,
+          duration: 0.8,
+          ease: "easeInOut",
+        }}
+        className="relative flex flex-col gap-4 items-center justify-center px-4"
+      >
       <AddStudentForm1 />
+      </motion.div>
+    </AuroraBackground>
     </div>
   );
 };

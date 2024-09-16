@@ -92,6 +92,7 @@ function Navbar({ className }: { className?: string }) {
 
             {/* Logout option */}
             <div onClick={handleLogout} className="cursor-pointer">Logout</div>
+            <div className="text-blue-300">Hello ,{user.username} 👋</div>
           </>
         ) : (
           // Show login option if no user is logged in
