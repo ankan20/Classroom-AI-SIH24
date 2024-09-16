@@ -190,11 +190,11 @@ const Signup = () => {
         <select
         value={role}
         onChange={(e) => setRole(e.target.value as Role)}
-        className="p-2 mb-4 bg-gray-50 dark:bg-zinc-800 border border-gray-600 rounded w-full "
+        className="p-2 mb-4 bg-gray-50 dark:bg-zinc-800 border border-gray-600 rounded w-full cursor-pointer"
       >
-        <option value="admin">Admin</option>
-        <option value="teacher">Teacher</option>
-        <option value="student">Student</option>
+        <option value="admin" className="cursor-pointer">Admin</option>
+        <option value="teacher" className="cursor-pointer">Teacher</option>
+        <option value="student" className="cursor-pointer">Student</option>
       </select>
 
       {role === 'student' && (
