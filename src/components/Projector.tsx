@@ -99,7 +99,7 @@ import { useState } from 'react';
 
 export default function UploadPage() {
   const [file, setFile] = useState(null);
-  const [results, setResults] = useState(null);
+  const [results, setResults] = useState<any |null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -142,7 +142,7 @@ export default function UploadPage() {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center min-h-screen bg-gray-900 text-white p-6">
+    <div className="flex flex-col justify-center items-center min-h-screen  text-white p-6">
       <div className="w-full max-w-3xl bg-gray-800 shadow-lg rounded-lg p-8">
         <h1 className="text-3xl font-bold mb-6 text-center">Upload a Video to See Resource Usage</h1>
 

@@ -8,8 +8,6 @@ import Projector from "@/components/Projector"
 const page = () => {
   return (
     <div>
-        <NoiseDetection />
-        <Projector />
         <FireDetection />
         
     </div>
