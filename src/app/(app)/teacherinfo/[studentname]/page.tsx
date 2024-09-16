@@ -268,6 +268,8 @@ const StudentBehaviorPage: React.FC = () => {
   const [insights, setInsights] = useState<string[]>([]);
   const [actions, setActions] = useState<string[]>([]);
   const [attendancePercentage, setAttendancePercentage] = useState<number | null>(null);
+  const [marksheet,setMarksheet] = useState<{ [key: string]: number }>({});
+  const [totalMarks,setTotalMarks]= useState<any>(null);
 
   useEffect(() => {
     if (studentname && teacherUsername) {
@@ -287,6 +289,10 @@ const StudentBehaviorPage: React.FC = () => {
             setInsights(insights);
             setActions(actions);
             setAttendancePercentage(data.attendancePercentage);
+            const{ marksheet, totalMarks } = calculateMarksWithNegative(data.behaviorData);
+            setMarksheet(marksheet);
+            setTotalMarks(totalMarks);
+
           } else {
             setError("Failed to fetch behavior data.");
           }
@@ -302,25 +308,41 @@ const StudentBehaviorPage: React.FC = () => {
   }, [studentname, teacherUsername]);
 
   if (loading) return <div className="flex justify-center items-center h-screen">Loading...</div>;
-  if(studentname =="abhisri" || studentname=="arijit" || studentname=="aishik"){
-    return (
-      <>
+  // if(studentname =="abhisri" || studentname=="arijit" || studentname=="aishik"){
+  //   return (
+  //     <>
       
-      <div className=" mt-40 flex items-center justify-center h-full p-6 bg-gray-800 text-white rounded-lg shadow-md w-[50%] ml-[20%]">
-      <div className="text-center">
-        <h2 className="text-xl font-semibold mb-2">No Data Available</h2>
-        <p className="text-gray-400">
-          The student has not attended any class 
-        </p>
-      </div>
-    </div>
-      </>
-    )
-  }
-  if (error) return <div className="text-red-500 text-center">{error}</div>;
+  //     <div className=" mt-40 flex items-center justify-center h-full p-6 bg-gray-800 text-white rounded-lg shadow-md w-[50%] ml-[20%]">
+  //     <div className="text-center">
+  //       <h2 className="text-xl font-semibold mb-2">No Data Available</h2>
+  //       <p className="text-gray-400">
+  //         The student has not attended any class 
+  //       </p>
+  //     </div>
+  //   </div>
+  //     </>
+  //   )
+  // }
+  if(!behaviorData){
+     
+     return (
+       <>
+      
+       <div className=" mt-40 flex items-center justify-center h-full p-6 bg-gray-800 text-white rounded-lg shadow-md w-[50%]">
+    <div className="text-center">
+       <h2 className="text-xl font-semibold mb-2 ">No Data Available</h2>
+         <p className="text-gray-400">
+           The student has not attended any class 
+         </p>
+       </div>
+     </div>
+       </>
+     )
+   }
+  if (error ) return <div className="text-red-500 text-center">{error}</div>;
  
   return (
-    <div className="mt-40 max-w-3xl mx-auto p-6 bg-gray-900 text-white rounded-lg shadow-md space-y-6">
+    <div className="mt-40 min-w-3xl mx-auto p-6  text-white rounded-lg shadow-md space-y-6">
       <h1 className=" text-3xl font-bold text-center">Student Behavior Insights</h1>
 
       {behaviorData && (
@@ -340,8 +362,8 @@ const StudentBehaviorPage: React.FC = () => {
           </ul>
         </div>
       )}
-
-      <div className="bg-gray-800 p-4 rounded-lg shadow space-y-4">
+  <div className="flex  justify-evenly gap-4">
+  <div className="bg-gray-800 p-4 rounded-lg shadow space-y-4">
         <h2 className="text-xl font-semibold">Insights</h2>
         <ul className="list-disc list-inside space-y-1">
           {insights.map((insight, index) => (
@@ -358,6 +380,13 @@ const StudentBehaviorPage: React.FC = () => {
           ))}
         </ul>
       </div>
+  </div>
+      
+      <div className="bg-gray-800 p-4 rounded-lg shadow space-y-4">
+        <h2 className="text-xl font-semibold">Behaviour Marks</h2>
+        <Marksheet marksheet={marksheet} totalMarks={totalMarks} />
+      </div>
+      
     </div>
   );
 };

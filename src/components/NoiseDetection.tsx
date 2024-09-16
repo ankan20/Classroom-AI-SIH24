@@ -25,7 +25,7 @@ const NoiseDetection = () => {
 
   const router = useRouter();
   const params = useParams();
-  const teacherUsername = params?.teachername;
+  const teacherUsername = params?.teachername ? decodeURIComponent(params.teachername as string) : "";
 
   // Handle file selection
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -117,11 +117,11 @@ const NoiseDetection = () => {
               type="file"
               accept="video/*"
               onChange={handleFileChange}
-              className="mb-4 w-full px-3 py-2 border border-gray-700 rounded-md bg-gray-900 text-white"
+               className="block w-full text-sm text-gray-300 border border-gray-700 rounded-lg p-3 bg-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 ease-in-out hover:bg-gray-800 active:bg-gray-800"
             />
             <button
               type="submit"
-              className="w-full px-4 py-2 bg-blue-600 rounded-md hover:bg-blue-700 transition-colors duration-200"
+              className="w-full px-4 mt-4 py-2 bg-blue-600 rounded-md hover:bg-blue-700 transition-colors duration-200"
             >
               {loading ? 'Processing...' : 'Upload Video'}
             </button>

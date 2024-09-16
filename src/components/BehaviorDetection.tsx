@@ -383,18 +383,18 @@ const BehaviorDetection: React.FC = () => {
         <div className="container mx-auto px-4">
           {/* Video Upload Section */}
           <section className="mb-8">
-            <div className="bg-gray-700 p-4 rounded-lg shadow-lg">
+            <div className="bg-gray-900 p-4 rounded-lg shadow-lg">
               <h2 className="text-2xl font-semibold mb-4">Upload Video</h2>
               <input
                 type="file"
                 accept="video/*"
                 onChange={handleFileChange}
-                className="mb-4"
+                 className="block w-full text-sm text-gray-300 border border-gray-600 rounded-lg p-3 bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 ease-in-out hover:bg-gray-700 active:bg-gray-600"
               />
               <button
                 onClick={handleSubmit}
                 disabled={loading}
-                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-500 disabled:opacity-50"
+                className="bg-blue-600 mt-5 text-white px-4 py-2 rounded-lg hover:bg-blue-500 disabled:opacity-50"
               >
                 {loading ? 'Processing...' : 'Submit Video'}
               </button>

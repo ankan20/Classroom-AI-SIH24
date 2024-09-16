@@ -54,15 +54,15 @@ const FireDetection: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-8">
-      <h1 className="text-3xl font-bold mb-6 text-center">Fire Detection</h1>
+    <div className="min-h-[78vh] mt-40 text-white p-8">
+      <h1 className="text-3xl font-bold mb-6 text-center">Fire Detection Alarm System</h1>
 
       <form onSubmit={handleSubmit} className="max-w-lg mx-auto bg-gray-800 p-6 rounded-lg shadow-lg">
         <input
           type="file"
           accept="video/*"
           onChange={handleFileChange}
-          className="mb-4 w-full px-3 py-2 border border-gray-700 rounded-md bg-gray-900 text-white"
+          className="block w-full text-sm text-gray-300 border border-gray-600 rounded-lg p-3 bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 ease-in-out hover:bg-gray-700 active:bg-gray-600"
         />
         <button
           type="submit"
