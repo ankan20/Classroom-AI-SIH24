@@ -52,6 +52,15 @@ function Navbar({ className }: { className?: string }) {
                 ></MenuItem>
               </Link>
             )}
+            {user.role === "student" && (
+              <Link href="/student/chat">
+                <MenuItem
+                  setActive={setActive}
+                  active={active}
+                  item="Chat"
+                ></MenuItem>
+              </Link>
+            )}
             {user.role === "teacher" && (
               <Link href="/teacher">
                 <MenuItem
