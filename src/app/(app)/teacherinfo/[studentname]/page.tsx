@@ -18,7 +18,7 @@ interface BehaviorData {
 const Marksheet: React.FC<{ marksheet: { [key: string]: number }; totalMarks: number | null }> = ({ marksheet, totalMarks }) => {
   return (
     <div className="bg-gray-800 p-4 rounded-lg shadow">
-      <h2 className="text-xl font-semibold mb-2">Marksheet</h2>
+      <h2 className="text-xl font-semibold mb-2">Internal assessment Marksheet</h2>
       <ul className="space-y-2">
         {Object.entries(marksheet).map(([key, value]) => (
           <li key={key} className="bg-gray-700 p-2 rounded">
@@ -26,7 +26,7 @@ const Marksheet: React.FC<{ marksheet: { [key: string]: number }; totalMarks: nu
           </li>
         ))}
         {totalMarks !== null && (
-          <div className="mt-2 text-lg font-semibold">Total Marks: {totalMarks}</div>
+          <div className="mt-2 text-lg font-semibold">Total Marks: {totalMarks} / 20</div>
         )}
       </ul>
     </div>

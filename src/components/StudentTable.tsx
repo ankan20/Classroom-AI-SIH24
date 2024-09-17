@@ -102,9 +102,11 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { BackgroundBeams } from "./ui/background-beams";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { Boxes } from "./ui/background-boxes";
 import axios from "axios";
+import Link from "next/link";
+
 
 // Define the interface for the student data
 interface Student {
@@ -124,13 +126,16 @@ const StudentTable: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [teacherName, setTeacherName] = useState<string | undefined>();
   const [message, setMessage] = useState<string>("");
-
+  const [decodedClassName, setDecodedClassName] = useState('');
+  const params = useParams();
   useEffect(() => {
     // Retrieve the teacher's username from local storage
     const teacherData = JSON.parse(localStorage.getItem('user') || '{}');
     const username = teacherData.username;
     setTeacherName(username);
-
+   
+    const className = params?.className ? decodeURIComponent(params.className as string) : "";
+    setDecodedClassName(className);
     // Fetch good and bad students data
     const fetchGoodBadStudents = async () => {
       try {
@@ -191,13 +196,13 @@ const StudentTable: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {goodStudents.map((student) => (
+              {goodStudents.map((student :any) => (
                 <tr key={student.student}  onClick={() => handleCardClick(student.username)} className="bg-green-100 border-b dark:bg-green-900 dark:border-green-700 hover:bg-green-200 dark:hover:bg-green-800">
                   <td className="py-4 px-6 font-medium text-gray-900 dark:text-white">{student.username}</td>
                   <td className="py-4 px-6 underline">click to see {student.reason} </td>
                 </tr>
               ))}
-              {badStudents.map((student) => (
+              {badStudents.map((student:any) => (
                 <tr key={student.student} onClick={() => handleCardClick(student.username)} className="cursor-pointer bg-red-100 border-b dark:bg-red-900 dark:border-red-700 hover:bg-red-200 dark:hover:bg-red-800">
                   <td className="py-4 px-6 font-medium text-gray-900 dark:text-white">{student.username}</td>
                   <td className="py-4 px-6 underline">{student.reason}</td>
@@ -206,6 +211,7 @@ const StudentTable: React.FC = () => {
             </tbody>
           </table>
         </div>
+        <p className="text-center text-blue-300"><Link href={`/teacher/${decodedClassName}/groups`}>Click here to see groups in class.</Link></p>
         <h1 className="text-3xl font-bold mb-6 text-center text-white">
           All Student Information
         </h1>
@@ -241,5 +247,101 @@ const StudentTable: React.FC = () => {
     </div>
   );
 };
+
+
+const  GroupwiseBehaviorReport = () => {
+  return (
+    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 p-6">
+      {/* Group 1 */}
+      <div className="bg-gray-800 text-white p-4 rounded-lg shadow-md">
+        <h3 className="text-lg font-semibold mb-2">Group (Frequency 3)</h3>
+        <ul className="mb-4">
+          <li>arijit: <span className="text-green-400">Good Student</span></li>
+          <li>abhisri: <span className="text-yellow-400">Moderate Attention</span></li>
+        </ul>
+        <p className="text-sm">
+          Action: This group includes both good students and those requiring moderate attention. Assign tasks that challenge the more attentive students while encouraging moderate attention students to stay focused.
+        </p>
+      </div>
+
+      {/* Group 2 */}
+      <div className="bg-gray-800 text-white p-4 rounded-lg shadow-md">
+        <h3 className="text-lg font-semibold mb-2">Group (Frequency 3)</h3>
+        <ul className="mb-4">
+          <li>arijit: <span className="text-green-400">Good Student</span></li>
+          <li>debajit: <span className="text-yellow-400">Moderate Attention</span></li>
+        </ul>
+        <p className="text-sm">
+          Action: This group includes both good students and those requiring moderate attention. Assign tasks that challenge the more attentive students while encouraging moderate attention students to stay focused.
+        </p>
+      </div>
+
+      {/* Group 3 */}
+      <div className="bg-gray-800 text-white p-4 rounded-lg shadow-md">
+        <h3 className="text-lg font-semibold mb-2">Group (Frequency 2)</h3>
+        <ul className="mb-4">
+          <li>priyam: <span className="text-green-400">Good Student</span></li>
+          <li>abhisri: <span className="text-yellow-400">Moderate Attention</span></li>
+        </ul>
+        <p className="text-sm">
+          Action: This group includes both good students and those requiring moderate attention. Assign tasks that challenge the more attentive students while encouraging moderate attention students to stay focused.
+        </p>
+      </div>
+
+      {/* Group 4 */}
+      <div className="bg-gray-800 text-white p-4 rounded-lg shadow-md">
+        <h3 className="text-lg font-semibold mb-2">Group (Frequency 2)</h3>
+        <ul className="mb-4">
+          <li>abhisri: <span className="text-yellow-400">Moderate Attention</span></li>
+          <li>ankan: <span className="text-yellow-400">Moderate Attention</span></li>
+        </ul>
+        <p className="text-sm">
+          Action: All students require moderate attention. It is suggested to monitor their engagement and occasionally offer additional guidance.
+        </p>
+      </div>
+
+      {/* Group 5 */}
+      <div className="bg-gray-800 text-white p-4 rounded-lg shadow-md">
+        <h3 className="text-lg font-semibold mb-2">Group (Frequency 2)</h3>
+        <ul className="mb-4">
+          <li>arijit: <span className="text-green-400">Good Student</span></li>
+          <li>ankan: <span className="text-yellow-400">Moderate Attention</span></li>
+        </ul>
+        <p className="text-sm">
+          Action: This group includes both good students and those requiring moderate attention. Assign tasks that challenge the more attentive students while encouraging moderate attention students to stay focused.
+        </p>
+      </div>
+
+      {/* Group 6 */}
+      <div className="bg-gray-800 text-white p-4 rounded-lg shadow-md">
+        <h3 className="text-lg font-semibold mb-2">Group (Frequency 1)</h3>
+        <ul className="mb-4">
+          <li>arijit: <span className="text-green-400">Good Student</span></li>
+          <li>priyam: <span className="text-green-400">Good Student</span></li>
+        </ul>
+        <p className="text-sm">
+          Action: All students are performing well. They can be assigned to work on a project together.
+        </p>
+      </div>
+
+      {/* Group 7 */}
+      <div className="bg-gray-800 text-white opacity-100 p-4 rounded-lg shadow-md">
+        <h3 className="text-lg font-semibold mb-2">Group (Frequency 1)</h3>
+        <ul className="mb-4">
+          <li>ankan: <span className="text-yellow-400">Moderate Attention</span></li>
+          <li>debajit: <span className="text-yellow-400">Moderate Attention</span></li>
+        </ul>
+        <p className="text-sm">
+          Action: All students require moderate attention. It is suggested to monitor their engagement and occasionally offer additional guidance.
+        </p>
+      </div>
+    </div>
+  );
+};
+
+
+
+
+
 
 export default StudentTable;
