@@ -6,7 +6,8 @@ import Link from "next/link";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-
+import Logo from '../../public/logo-removebg-preview.png'
+import Image from "next/image"; 
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -79,11 +80,11 @@ const Login = () => {
       </p>
     </form> */}
     <div className="max-w-md w-full mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-white dark:bg-black">
-      <h2 className="font-bold text-xl text-neutral-800 dark:text-neutral-200">
-        Welcome back to ClassroomAI
+      <h2 className="font-bold text-xl text-neutral-800 dark:text-neutral-200 flex items-center">
+        Welcome back to  <Image src={Logo} alt="Logo" width={70} height={50} className="rounded-full" />
       </h2>
       <p className="text-neutral-600 text-sm max-w-sm mt-2 dark:text-neutral-300">
-            Login for ClassroomAI if you're not new here.
+            Login for Shiksha if you're not new here.
       </p>
  
       <form className="my-8" onSubmit={handleLogin}>

@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import Logo from '../../public/logo-removebg-preview.png'
+import Image from "next/image"; 
 
 type Role = 'admin' | 'teacher' | 'student';
 
@@ -78,7 +80,7 @@ const Signup = () => {
   return (
     <div>
        {/* <form onSubmit={handleSignup} className="flex flex-col max-w-md p-6 mx-auto mt-10 bg-gray-800 rounded-lg shadow-md">
-      <h2 className="mb-4 text-2xl font-bold text-center text-primary">Signup on ClassroomAI</h2>
+      <h2 className="mb-4 text-2xl font-bold text-center text-primary">Signup on Shiksha</h2>
       <input
         type="text"
         placeholder="Username"
@@ -161,11 +163,11 @@ const Signup = () => {
       </p>
     </form> */}
     <div className="max-w-md w-full mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-white dark:bg-black">
-      <h2 className="font-bold text-xl text-neutral-800 dark:text-neutral-200">
-        Welcome to ClassroomAI
+      <h2 className="font-bold text-xl text-neutral-800 dark:text-neutral-200 flex items-center">
+        Welcome to <Image src={Logo} alt="Logo" width={70} height={50} className="rounded-full " />
       </h2>
       <p className="text-neutral-600 text-sm max-w-sm mt-2 dark:text-neutral-300">
-            Sign up for ClassroomAI if you're new here.
+            Sign up for Shiksha if you're new here.
       </p>
  
       <form className="my-8" onSubmit={handleSignup}>

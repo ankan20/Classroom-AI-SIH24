@@ -15,13 +15,12 @@ function HeroSection() {
       />
         <div className="p-4 relative z-10 w-full text-center" >
             <h1
-            className="mt-20 md:mt-0 text-4xl md:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-400"
-            >Smart Monitoring and Analytics from ClassroomAI</h1>
+            className="mt-20 md:mt-0 text-4xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-400"
+            >Smart Monitoring and Analytics from Shiksha</h1>
             <p
             className="mt-4 font-normal text-base md:text-lg text-neutral-300 max-w-lg mx-auto"
             >
-
-            Dive into the future of education with ClassroomAI. Whether you're a teacher or a student, leverage our advanced monitoring and insightful analytics to elevate classroom experiences and unlock new levels of learning.</p>
+            Dive into the future of education with Shiksha. Whether you're a teacher or a student, leverage our advanced monitoring and insightful analytics to elevate classroom experiences and unlock new levels of learning.</p>
             <div className="mt-4">
                 <Link href={"/login"}>
                     <Button

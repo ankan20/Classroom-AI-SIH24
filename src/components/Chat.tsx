@@ -68,7 +68,7 @@ const Chat: React.FC = () => {
     <div className="flex flex-col h-[66vh] max-w-4xl mx-auto">
       {/* Username Container */}
       <div className="flex items-center justify-center p-2 bg-gray-800 text-white rounded-t-lg">
-        <span className="text-lg font-semibold">{username} ask you doubts</span>
+        <span className="text-lg font-semibold">{username} ask your doubts</span>
       </div>
       {/* Chat Container */}
       <div className="flex-1 overflow-y-auto p-4 bg-gray-900 text-white rounded-b-lg" ref={chatContainerRef}>

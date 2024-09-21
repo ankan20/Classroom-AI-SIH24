@@ -3,6 +3,8 @@ import { Menu, MenuItem } from "./ui/navbar-menu";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import Logo from '../../public/logo-removebg-preview.png'
+import Image from "next/image"; 
 
 function Navbar({ className }: { className?: string }) {
   const [active, setActive] = useState<string | null>(null);
@@ -31,7 +33,9 @@ function Navbar({ className }: { className?: string }) {
     <div
       className={cn("fixed top-10 inset-x-0 max-w-2xl mx-auto z-50", className)}
     >
-      <Menu setActive={setActive}>
+      
+      <Menu setActive={setActive} >
+      <Image src={Logo} alt="Logo" width={80}   className="md:-mt-7 md:mr-3 md:-mb-7"/>
         <Link href={"/"}>
           <MenuItem
             setActive={setActive}

@@ -211,7 +211,7 @@ const StudentTable: React.FC = () => {
             </tbody>
           </table>
         </div>
-        <p className="text-center text-blue-300"><Link href={`/teacher/${decodedClassName}/groups`}>Click here to see groups in class.</Link></p>
+        <p className="text-center text-blue-300 underline mb-2"><Link href={`/teacher/${decodedClassName}/groups`}>Click here to see groups in class.</Link></p>
         <h1 className="text-3xl font-bold mb-6 text-center text-white">
           All Student Information
         </h1>
